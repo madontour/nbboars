@@ -4,8 +4,8 @@
  
 
 
-require "defaultincludes.inc";
-require_once "mrbs_sql.inc";
+require "includes/defaultincludes.inc";
+//require_once "/contxt/oars_sql.inc";
 
 $fields = sql_field_info($tbl_entry);
 
@@ -20,24 +20,25 @@ foreach ($entry_fields as $field)
   }
 }
 
-function create_field_entry_name($disabled=FALSE)
+function create_field_entry_jcustomercaller($disabled=FALSE)
 {
   global $name, $maxlength, $is_mandatory_field;
   
-  echo "<div id=\"div_name\">\n";
-  if ($name == "")   $name = getusername();
-  
+  echo "<div id=\"div_jcustomercaller\">\n";
+  if ($jcustomercaller == ""){   
+      $jcustomercaller = getusername();
+  }
   // 'mandatory' is there to prevent null input (pattern doesn't seem to be triggered until
   // there is something there).
-  $params = array('label'      => get_vocab("namebooker") . ":",
+  $params = array('label'      => get_vocab("jcustomercaller") . ":",
                   'name'       => 'name',
-                  'field'      => 'entry.name',
-                  'value'      => $name,
+                  'field'      => 'jobs.jcustomercaller',
+                  'value'      => $jcustomercaller,
                   'type'       => 'text',
                   'pattern'    => REGEX_TEXT_POS,
                   'disabled'   => $disabled,
                   'mandatory'  => TRUE,
-                  'maxlength'  => $maxlength['entry.name']);
+                  'maxlength'  => $maxlength['jobs.jcustomercaller']);
                   
   generate_input($params);
 

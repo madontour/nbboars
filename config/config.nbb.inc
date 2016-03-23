@@ -594,7 +594,7 @@ $default_area_room_delimiter = '/';
  * Entry Types
  *************/
  
- require "config.nbbshifttypes.inc";
+ //require "config.nbbshifttypes.inc";
 
 
 //--------------------  Area Defaults Here --------------------------------------------

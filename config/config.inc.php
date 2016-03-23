@@ -22,7 +22,7 @@ $timezone = "Europe/London";
  * Database settings
  ******************/
 
-require "/nbbcontxt/oars_dbconnect.inc";
+require "../nbbcontxt/oars_dbconnect.inc";
 
 /****************************
  * Miscellaneous Settings
