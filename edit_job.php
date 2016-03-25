@@ -7,7 +7,7 @@
 require "includes/defaultincludes.inc";
 //require_once "/contxt/oars_sql.inc";
 
-$fields = sql_field_info($tbl_entry);
+$fields = sql_field_info($tbl_jobs);
 
 // Fill $edit_entry_field_order with not yet specified entries.
 $entry_fields = array('jcustomercaller', 'jcustomerlocation', 'jcustomercalltime');

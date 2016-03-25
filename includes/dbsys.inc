@@ -776,98 +776,98 @@ function db_get_userpass()
   // Print footer and exit
   print_footer(TRUE);
 }
-
-
-//////////////////////////////////////////
-// Connect to the configured MRBS database
-
-$f = "sql_${dbsys}_default_connect";
-$f();
-
-// Default version is 0, before we had schema versions
-$current_db_schema_version = 0;
-$current_local_db_schema_version = 0;
-
-if (sql_table_exists($tbl_variables))
-{
-  $current_db_schema_version = sql_query1("SELECT variable_content ".
-                                          "FROM $tbl_variables ".
-                                          "WHERE variable_name = 'db_version'");
-  $current_local_db_schema_version = sql_query1("SELECT variable_content ".
-                                                "FROM $tbl_variables ".
-                                                "WHERE variable_name = 'local_db_version'");                                            
-  if ($current_local_db_schema_version < 0)
-  {
-    $current_local_db_schema_version = 0;
-  }
-}
-
-// If either of the database schema version numbers are out of date, then 
-// upgrade the database - provided of course that the entry table exists.
-// (We check that the entry table exists just in case this is a new installation
-// and they've forgotten to create the database tables)
-if ((($current_db_schema_version < $db_schema_version) || 
-     ($current_local_db_schema_version < $local_db_schema_version)) &&
-    sql_table_exists($tbl_entry))
-{
-  // Upgrade needed
-
-  require_once "functions.inc";
-  require_once "upgrade.inc";
-
-  // Just use a simple header as the normal header may (a) use features
-  // which are not available until after the database upgrade or (b) use
-  // functions which are not available until after dbsys has run.
-  print_simple_header();
- 
-  echo "<h1>" . get_vocab("mrbs") . "</h1>\n";
-  echo "<p class=\"error\">" . get_vocab("upgrade_required") . "</p>\n"; 
-
-  // We need to open a connection to the database with a database
-  // username that has admin rights.
-  while (empty($admin_handle))
-  {
-    $db_admin_username = get_form_var('form_username', 'string');
-    $db_admin_password = get_form_var('form_password', 'string');
-    if (!isset($db_admin_username) || !isset($db_admin_password))
-    {
-      // Get a username and password if we haven't got them
-      echo "<p>" . get_vocab("supply_userpass") . "</p>\n";
-      echo "<p>" . get_vocab("contact_admin") . "</p>\n"; 
-      db_get_userpass();
-    }
-    else
-    {
-      // Turn off error reporting for the database connection because
-      // we don't want to see the system error reports if the user
-      // supplies an incorrect username and password.
-      $old_error_reporting = error_reporting(0);
-      $admin_handle = sql_connect($dbsys, $db_host, $db_admin_username, $db_admin_password, $db_database, 0, $db_port);
-      error_reporting($old_error_reporting);  // Turn error reporting back on
-    }
-  }
-
-  $ok = TRUE;
-
-  // Do any MRBS upgrades first
-  if ($current_db_schema_version < $db_schema_version)
-  {
-    $ok = upgrade_database(FALSE, $current_db_schema_version, $db_schema_version, $admin_handle);
-  }
-  // Then any local upgrades
-  if ($ok && $current_local_db_schema_version < $local_db_schema_version)
-  {
-    $ok = upgrade_database(TRUE, $current_local_db_schema_version, $local_db_schema_version, $admin_handle);
-  }
-  
-  // close the database connection that has admin rights
-  sql_close($admin_handle);
-
-  if ($ok)
-  {
-    echo "<p>" . get_vocab("upgrade_completed") . "</p>\n";
-  }
-  echo "<a href=\"./\">" . get_vocab("returncal") . "</a>.";
+//
+//
+////////////////////////////////////////////
+//// Connect to the configured MRBS database
+//
+//$f = "sql_${dbsys}_default_connect";
+//$f();
+//
+//// Default version is 0, before we had schema versions
+//$current_db_schema_version = 0;
+//$current_local_db_schema_version = 0;
+//$tbl_variables = $tbl_jobs;
+//if (sql_table_exists($tbl_variables))
+//{
+//  $current_db_schema_version = sql_query1("SELECT variable_content ".
+//                                          "FROM $tbl_variables ".
+//                                          "WHERE variable_name = 'db_version'");
+//  $current_local_db_schema_version = sql_query1("SELECT variable_content ".
+//                                                "FROM $tbl_variables ".
+//                                                "WHERE variable_name = 'local_db_version'");                                            
+//  if ($current_local_db_schema_version < 0)
+//  {
+//    $current_local_db_schema_version = 0;
+//  }
+//}
+//
+//// If either of the database schema version numbers are out of date, then 
+//// upgrade the database - provided of course that the entry table exists.
+//// (We check that the entry table exists just in case this is a new installation
+//// and they've forgotten to create the database tables)
+//if ((($current_db_schema_version < $db_schema_version) || 
+//     ($current_local_db_schema_version < $local_db_schema_version)) &&
+//    sql_table_exists($tbl_jobs))
+//{
+//  // Upgrade needed
+//
+//  require_once "functions.inc";
+//  require_once "upgrade.inc";
+//
+//  // Just use a simple header as the normal header may (a) use features
+//  // which are not available until after the database upgrade or (b) use
+//  // functions which are not available until after dbsys has run.
+//  print_simple_header();
+// 
+//  echo "<h1>" . get_vocab("mrbs") . "</h1>\n";
+//  echo "<p class=\"error\">" . get_vocab("upgrade_required") . "</p>\n"; 
+//
+//  // We need to open a connection to the database with a database
+//  // username that has admin rights.
+//  while (empty($admin_handle))
+//  {
+//    $db_admin_username = get_form_var('form_username', 'string');
+//    $db_admin_password = get_form_var('form_password', 'string');
+//    if (!isset($db_admin_username) || !isset($db_admin_password))
+//    {
+//      // Get a username and password if we haven't got them
+//      echo "<p>" . get_vocab("supply_userpass") . "</p>\n";
+//      echo "<p>" . get_vocab("contact_admin") . "</p>\n"; 
+//      db_get_userpass();
+//    }
+//    else
+//    {
+//      // Turn off error reporting for the database connection because
+//      // we don't want to see the system error reports if the user
+//      // supplies an incorrect username and password.
+//      $old_error_reporting = error_reporting(0);
+//      $admin_handle = sql_connect($dbsys, $db_host, $db_admin_username, $db_admin_password, $db_database, 0, $db_port);
+//      error_reporting($old_error_reporting);  // Turn error reporting back on
+//    }
+//  }
+//
+//  $ok = TRUE;
+//
+//  // Do any MRBS upgrades first
+//  if ($current_db_schema_version < $db_schema_version)
+//  {
+//    $ok = upgrade_database(FALSE, $current_db_schema_version, $db_schema_version, $admin_handle);
+//  }
+//  // Then any local upgrades
+//  if ($ok && $current_local_db_schema_version < $local_db_schema_version)
+//  {
+//    $ok = upgrade_database(TRUE, $current_local_db_schema_version, $local_db_schema_version, $admin_handle);
+//  }
+//  
+//  // close the database connection that has admin rights
+//  sql_close($admin_handle);
+//
+//  if ($ok)
+//  {
+//    echo "<p>" . get_vocab("upgrade_completed") . "</p>\n";
+//  }
+//  echo "<a href=\"./\">" . get_vocab("returncal") . "</a>.";
 
   print_footer(TRUE);
-}
+
